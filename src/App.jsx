@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import axios from 'axios';
 const API_URL = import.meta.env.VITE_API_URL;
 
@@ -7,6 +7,24 @@ const App = () => {
   const [plotUrl, setPlotUrl] = useState('');
   const [isPlotZoomed, setIsPlotZoomed] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
+  const [viewCount, setViewCount] = useState(0);
+
+  useEffect(() => {
+    const fetchViewCount = async () => {
+      try {
+        const response = await axios.get(`${API_URL}/view-count`);
+        setViewCount(response.data.view_count);
+      } catch (error) {
+        console.error('Error fetching view count:', error);
+      }
+    };
+
+    fetchViewCount();
+
+    const intervalId = setInterval(fetchViewCount, 500); // Fetch view count every 0.5 seconds
+
+    return () => clearInterval(intervalId); // Cleanup interval on component unmount
+  }, []);
 
   const handlePredictionStepChange = (event) => {
     setPredictionStep(event.target.value);
@@ -75,6 +93,12 @@ const App = () => {
             />
           </div>
         )}
+        
+      </div>
+      <div className="mt-4 text-center text-gray-600">
+        <span className="text-lg font-medium">Vous êtes la</span>
+        <span className="text-2xl font-bold text-indigo-600 mx-1">{viewCount}</span>
+        <span className="text-lg font-medium">ème personne à voir la prédiction du cours de l&apos;or.</span>
       </div>
     </div>
   );
