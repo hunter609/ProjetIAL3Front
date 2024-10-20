@@ -99,9 +99,9 @@ const App = () => {
         
       </div>
       <div className="mt-4 text-center text-gray-600">
-        <span className="text-lg font-medium">Vous êtes la</span>
+        <span className="text-lg font-medium">Vous êtes la personne N°</span>
         <span className="text-2xl font-bold text-indigo-600 mx-1">{viewCount}</span>
-        <span className="text-lg font-medium">ème personne à voir la prédiction du cours de l&apos;or.</span>
+        <span className="text-lg font-medium"> à voir la prédiction du cours de l&apos;or.</span>
       </div>
     </div>
   );
