@@ -32,31 +32,31 @@ const App = () => {
 
   return (
     <div className="min-h-screen bg-gray-100 flex flex-col items-center justify-center p-4">
-      <div className="bg-white shadow-lg rounded-lg p-6 max-w-md w-full">
-        <h1 className="text-2xl font-bold mb-4 text-center">Prévision du Prix de l&apos;Or</h1>
+      <div className="bg-white shadow-2xl rounded-lg p-6 max-w-md w-full">
+        <h1 className="text-3xl font-extrabold mb-4 text-center text-transparent bg-clip-text bg-gradient-to-r from-indigo-500 to-pink-500">Prévision du Prix de l&apos;Or</h1>
         <label className="block mb-4">
           <span className="text-gray-700">Durée de prédiction en jours:</span>
           <input
             type="number"
             value={predictionStep}
             onChange={handlePredictionStepChange}
-            className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50"
+            className="mt-1 px-2 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50"
           />
         </label>
         <button
           onClick={handlePredictClick}
-          className="w-full bg-indigo-600 text-white py-2 rounded-md hover:bg-indigo-700 transition duration-300"
+          className="w-full bg-gradient-to-r from-indigo-600 to-purple-600 text-white py-2 rounded-md hover:bg-gradient-to-l hover:from-purple-600 hover:to-indigo-600 transition duration-300 transform"
         >
           Prédire
         </button>
         {isLoading && (
           <div className="mt-6 flex justify-center items-center">
-            <div className="loader ease-linear rounded-full border-8 border-t-8 border-gray-200 h-32 w-32"></div>
+            <div className="loader ease-linear rounded-full border-8 border-t-8 border-gray-200 h-32 w-32 animate-spin"></div>
           </div>
         )}
         {plotUrl && !isLoading && (
           <div className="mt-6">
-            <h2 className="text-xl font-semibold mb-2 text-center">Graphique de Prévision</h2>
+            <h2 className="text-xl font-semibold mb-2 text-center text-transparent bg-clip-text bg-gradient-to-r  from-indigo-500 to-pink-500">Graphique de Prévision</h2>
             <div
               className={`fixed inset-0 bg-black bg-opacity-75 flex items-center justify-center z-50 transition-opacity duration-300 ${isPlotZoomed ? 'opacity-100' : 'opacity-0 pointer-events-none'}`}
               onClick={handlePlotClick}
@@ -64,7 +64,7 @@ const App = () => {
               <img
                 src={`data:image/png;base64,${plotUrl}`}
                 alt="Prévision du Prix de l'Or"
-                className="w-full h-full object-contain"
+                className="w-full h-full object-contain transform transition-transform duration-500 ${isPlotZoomed ? 'scale-100' : 'scale-75'}"
               />
             </div>
             <img
