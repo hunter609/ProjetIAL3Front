@@ -6,12 +6,14 @@ const App = () => {
   const [predictionStep, setPredictionStep] = useState(30);
   const [plotUrl, setPlotUrl] = useState('');
   const [isPlotZoomed, setIsPlotZoomed] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
 
   const handlePredictionStepChange = (event) => {
     setPredictionStep(event.target.value);
   };
 
   const handlePredictClick = async () => {
+    setIsLoading(true);
     try {
       const response = await axios.post(`${API_URL}/predict`, {
         prediction_step: predictionStep,
@@ -19,6 +21,8 @@ const App = () => {
       setPlotUrl(response.data.plot_url);
     } catch (error) {
       console.error('Error fetching prediction:', error);
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -45,7 +49,12 @@ const App = () => {
         >
           Prédire
         </button>
-        {plotUrl && (
+        {isLoading && (
+          <div className="mt-6 flex justify-center items-center">
+            <div className="loader ease-linear rounded-full border-8 border-t-8 border-gray-200 h-32 w-32"></div>
+          </div>
+        )}
+        {plotUrl && !isLoading && (
           <div className="mt-6">
             <h2 className="text-xl font-semibold mb-2 text-center">Graphique de Prévision</h2>
             <div
