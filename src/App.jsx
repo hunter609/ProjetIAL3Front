@@ -50,7 +50,10 @@ const App = () => {
 
   return (
     <div className="min-h-screen bg-gray-100 flex flex-col items-center justify-center p-4">
-      <div className="bg-white shadow-2xl rounded-lg p-6 max-w-md w-full">
+      <header className="w-full flex bg-gradient-to-r from-indigo-600 to-purple-600 text-white fixed top-0 z-50 justify-center py-6 shadow-lg">
+        <h1 className="text-xl sm:text-2xl md:text-3xl lg:text-4xl font-extrabold text-center tracking-wide px-4">Bienvenue sur le site de Prévision du Prix de l&apos;Or</h1>
+      </header>
+      <div className="bg-white shadow-2xl rounded-lg p-6 max-w-md w-full mt-6">
         <h1 className="text-3xl font-extrabold mb-4 text-center text-transparent bg-clip-text bg-gradient-to-r from-indigo-500 to-pink-500">Prévision du Prix de l&apos;Or</h1>
         <label className="block mb-4">
           <span className="text-gray-700">Durée de prédiction en jours:</span>
