@@ -5,6 +5,7 @@ const API_URL = import.meta.env.VITE_API_URL;
 const App = () => {
   const [predictionStep, setPredictionStep] = useState(30);
   const [plotUrl, setPlotUrl] = useState('');
+  const [isPlotZoomed, setIsPlotZoomed] = useState(false);
 
   const handlePredictionStepChange = (event) => {
     setPredictionStep(event.target.value);
@@ -19,6 +20,10 @@ const App = () => {
     } catch (error) {
       console.error('Error fetching prediction:', error);
     }
+  };
+
+  const handlePlotClick = () => {
+    setIsPlotZoomed(!isPlotZoomed);
   };
 
   return (
@@ -43,7 +48,22 @@ const App = () => {
         {plotUrl && (
           <div className="mt-6">
             <h2 className="text-xl font-semibold mb-2 text-center">Graphique de Prévision</h2>
-            <img src={`data:image/png;base64,${plotUrl}`} alt="Prévision du Prix de l'Or" className="w-full rounded-md" />
+            <div
+              className={`fixed inset-0 bg-black bg-opacity-75 flex items-center justify-center z-50 transition-opacity duration-300 ${isPlotZoomed ? 'opacity-100' : 'opacity-0 pointer-events-none'}`}
+              onClick={handlePlotClick}
+            >
+              <img
+                src={`data:image/png;base64,${plotUrl}`}
+                alt="Prévision du Prix de l'Or"
+                className="w-full h-full object-contain"
+              />
+            </div>
+            <img
+              src={`data:image/png;base64,${plotUrl}`}
+              alt="Prévision du Prix de l'Or"
+              className="w-full rounded-md cursor-pointer transition-transform transform hover:scale-105"
+              onClick={handlePlotClick}
+            />
           </div>
         )}
       </div>
