@@ -8,6 +8,9 @@ const App = () => {
   const [isPlotZoomed, setIsPlotZoomed] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [viewCount, setViewCount] = useState(0);
+  const [startDate, setStartDate] = useState('2019-01-01');
+  const [endDate, setEndDate] = useState(new Date().toISOString().split('T')[0]);
+  const [error, setError] = useState('');
 
   useEffect(() => {
     const fetchViewCount = async () => {
@@ -30,11 +33,32 @@ const App = () => {
     setPredictionStep(event.target.value);
   };
 
+  const handleStartDateChange = (event) => {
+    setStartDate(event.target.value);
+  };
+
+  const handleEndDateChange = (event) => {
+    const selectedDate = event.target.value;
+    const today = new Date().toISOString().split('T')[0];
+    if (selectedDate > today) {
+      setError('La date de fin ne peut pas dépasser la date d\'aujourd\'hui.');
+      setEndDate(today);
+    } else {
+      setError('');
+      setEndDate(selectedDate);
+    }
+  };
+
   const handlePredictClick = async () => {
+    if (error) {
+      return;
+    }
     setIsLoading(true);
     try {
       const response = await axios.post(`${API_URL}/predict`, {
         prediction_step: predictionStep,
+        start_date: startDate,
+        end_date: endDate,
       });
       setPlotUrl(response.data.plot_url);
     } catch (error) {
@@ -49,9 +73,9 @@ const App = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gray-100 flex flex-col items-center justify-center p-4">
-      <header className="w-full flex bg-gradient-to-r from-indigo-600 to-purple-600 text-white fixed top-0 z-50 justify-center py-6 shadow-lg">
-        <h1 className="text-xl sm:text-2xl md:text-3xl lg:text-4xl font-extrabold text-center tracking-wide px-4">Bienvenue sur le site de Prévision du Prix de l&apos;Or</h1>
+    <div className="min-h-screen bg-gray-100 flex flex-col items-center justify-center p-4 mt-12">
+      <header className="w-full flex bg-gradient-to-r from-indigo-600 to-purple-600 text-white fixed top-0 z-50 justify-center py-4 shadow-lg">
+        <h1 className="text-xl sm:text-2xl md:text-3xl lg:text-3xl font-extrabold text-center tracking-wide px-4">Bienvenue sur le site de Prévision du Prix de l&apos;Or</h1>
       </header>
       <div className="bg-white shadow-2xl rounded-lg p-6 max-w-md w-full mt-6">
         <h1 className="text-3xl font-extrabold mb-4 text-center text-transparent bg-clip-text bg-gradient-to-r from-indigo-500 to-pink-500">Prévision du Prix de l&apos;Or</h1>
@@ -64,6 +88,27 @@ const App = () => {
             className="mt-1 px-2 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50"
           />
         </label>
+        <label className="block mb-4">
+          <span className="text-gray-700">Date de début:</span>
+          <input
+            type="date"
+            value={startDate}
+            onChange={handleStartDateChange}
+            className="mt-1 px-2 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50"
+          />
+        </label>
+        <label className="block mb-4">
+          <span className="text-gray-700">Date de fin:</span>
+          <input
+            type="date"
+            value={endDate}
+            onChange={handleEndDateChange}
+            className="mt-1 px-2 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50"
+          />
+        </label>
+        {error && (
+          <div className="text-red-500 text-sm mb-4">{error}</div>
+        )}
         <button
           onClick={handlePredictClick}
           className="w-full bg-gradient-to-r from-indigo-600 to-purple-600 text-white py-2 rounded-md hover:bg-gradient-to-l hover:from-purple-600 hover:to-indigo-600 transition duration-300 transform"
